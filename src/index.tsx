@@ -341,6 +341,12 @@ export default class ScomGovernanceUnlockStaking extends Module {
                 };
                 this.btnUnlock.caption = "Unlock";
                 this.btnUnlock.enabled = !this.isUnlockVotingBalanceDisabled;
+                let diff = this.freezedStake.lockTill - Date.now();
+                if (new BigNumber(this.freezedStake.amount).gt(0) && diff > 0) {
+                    setTimeout(() => {
+                        this.btnUnlock.enabled = true;
+                    }, diff);
+                }
                 this.lblFreezedStake.caption = formatNumber(this.freezedStake.amount);
                 const availableStake = `${moment(govState.lockTill).format('DD MMM YYYY')} at ${moment(govState.lockTill).format(
                     'HH:mm',

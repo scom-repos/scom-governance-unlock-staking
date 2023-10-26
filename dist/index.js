@@ -563,6 +563,12 @@ define("@scom/scom-governance-unlock-staking", ["require", "exports", "@ijstech/
                         };
                         this.btnUnlock.caption = "Unlock";
                         this.btnUnlock.enabled = !this.isUnlockVotingBalanceDisabled;
+                        let diff = this.freezedStake.lockTill - Date.now();
+                        if (new eth_wallet_4.BigNumber(this.freezedStake.amount).gt(0) && diff > 0) {
+                            setTimeout(() => {
+                                this.btnUnlock.enabled = true;
+                            }, diff);
+                        }
                         this.lblFreezedStake.caption = (0, index_2.formatNumber)(this.freezedStake.amount);
                         const availableStake = `${(0, components_4.moment)(govState.lockTill).format('DD MMM YYYY')} at ${(0, components_4.moment)(govState.lockTill).format('HH:mm')}`;
                         this.lblAvailVotingBalance.caption = !this.freezedStake || new eth_wallet_4.BigNumber(this.freezedStake.amount).eq(0) ? 'Unavailable stake' : availableStake;

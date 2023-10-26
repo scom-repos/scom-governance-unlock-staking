@@ -46,7 +46,7 @@ export default class ScomGovernanceUnlockStaking extends Module {
     private loadingElm: Panel;
     private lblFreezedStake: Label;
     private lblAvailVotingBalance: Label;
-    private btnLock: Button;
+    private btnUnlock: Button;
     private txStatusModal: ScomTxStatusModal;
     private mdWallet: ScomWalletModal;
     private freezedStake: any = {};
@@ -328,8 +328,8 @@ export default class ScomGovernanceUnlockStaking extends Module {
             await this.initWallet();
             const connected = isClientWalletConnected();
             if (!connected || !this.state.isRpcWalletConnected()) {
-                this.btnLock.caption = connected ? "Switch Network" : "Connect Wallet";
-                this.btnLock.enabled = true;
+                this.btnUnlock.caption = connected ? "Switch Network" : "Connect Wallet";
+                this.btnUnlock.enabled = true;
             } else {
                 const govState = await getGovState(this.state);
                 this.freezedStake = {
@@ -337,8 +337,8 @@ export default class ScomGovernanceUnlockStaking extends Module {
                     lockTill: govState.lockTill,
                     timestamp: govState.freezeStakeTimestamp
                 };
-                this.btnLock.caption = "Unlock";
-                this.btnLock.enabled = this.isUnlockVotingBalanceDisabled;
+                this.btnUnlock.caption = "Unlock";
+                this.btnUnlock.enabled = !this.isUnlockVotingBalanceDisabled;
                 this.lblFreezedStake.caption = formatNumber(this.freezedStake.amount);
                 const availableStake = `${moment(govState.lockTill).format('DD MMM YYYY')} at ${moment(govState.lockTill).format(
                     'HH:mm',
@@ -383,8 +383,8 @@ export default class ScomGovernanceUnlockStaking extends Module {
                 this.connectWallet();
                 return;
             }
-            this.btnLock.rightIcon.spin = true;
-            this.btnLock.rightIcon.visible = true;
+            this.btnUnlock.rightIcon.spin = true;
+            this.btnUnlock.rightIcon.visible = true;
             const token = this.state.getGovToken(this.chainId);
             const amount = Utils.toDecimals(this.freezedStake.amount, token.decimals).toString();
             const wallet = this.state.getRpcWallet();
@@ -440,8 +440,8 @@ export default class ScomGovernanceUnlockStaking extends Module {
         } catch (err) {
             console.error(err);
         }
-        this.btnLock.rightIcon.spin = false;
-        this.btnLock.rightIcon.visible = false;
+        this.btnUnlock.rightIcon.spin = false;
+        this.btnUnlock.rightIcon.visible = false;
     }
 
     render() {
@@ -473,28 +473,26 @@ export default class ScomGovernanceUnlockStaking extends Module {
                                 <i-label caption="Unlock Your Voting Balance" font={{ size: "1rem", bold: true, color: Theme.text.third }}></i-label>
                             </i-hstack>
                             <i-vstack gap="1rem">
-                                <i-hstack verticalAlignment="center" horizontalAlignment="space-between">
-                                    <i-label caption="Staked Balance available to add" font={{ size: "0.875rem" }}></i-label>
+                                <i-hstack verticalAlignment="center" horizontalAlignment="space-between" gap="0.5rem">
+                                    <i-label caption="Staked Balance Available to Add" font={{ size: "0.875rem" }}></i-label>
                                     <i-label
                                         id="lblFreezedStake"
-                                        class="text-right"
-                                        width="50%"
                                         caption="-"
                                         font={{ size: "0.875rem" }}
-                                        textOverflow="ellipsis"
+                                        textOverflow="ellipsis" 
                                         overflow="hidden"
                                     ></i-label>
                                 </i-hstack>
                             </i-vstack>
-                            <i-vstack gap="0.5rem">
-                                <i-label caption="Voting Balance Available" font={{ size: '1rem', color: Theme.text.third }}></i-label>
-                                <i-label id="lblAvailVotingBalance" font={{ size: '0.875rem' }}></i-label>
-                            </i-vstack>
-                            <i-hstack horizontalAlignment="center" verticalAlignment="center" margin={{ top: "0.5rem" }}>
+                            <i-hstack verticalAlignment="center" horizontalAlignment="space-between" gap="0.5rem">
+                                <i-label caption="Voting Balance Available" font={{ size: '0.875rem' }}></i-label>
+                                <i-label id="lblAvailVotingBalance" caption="-" font={{ size: '0.875rem' }}></i-label>
+                            </i-hstack>
+                            <i-hstack horizontalAlignment="center" verticalAlignment="center" margin={{ top: "1rem" }}>
                                 <i-button
-                                    id="btnLock"
+                                    id="btnUnlock"
                                     width={150}
-                                    caption="Create"
+                                    caption="Unlock"
                                     font={{ size: '1rem', weight: 600, color: '#ffff' }}
                                     lineHeight={1.5}
                                     background={{ color: Theme.background.gradient }}

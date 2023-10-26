@@ -377,6 +377,52 @@ export default class ScomGovernanceUnlockStaking extends Module {
             await clientWallet.switchNetwork(this.chainId);
         }
     }
+
+    private getAddVoteBalanceErrMsg(err: any) {
+        const processError = (err: any) => {
+            if (err) {
+                if (!err.code) {
+                    try {
+                        return JSON.parse(err.message.substr(err.message.indexOf('{')));
+                    } catch (moreErr) {
+                        err = { code: 777, message: "Unknown Error" };
+                    }
+                } else {
+                    return err;
+                }
+            } else {
+                return { code: 778, message: "Error is Empty" };
+            }
+        }
+        let errorContent = '';
+        err = processError(err);
+        switch (err.message) {
+            case 'Transaction was not mined within 50 blocks, please make sure your transaction was properly sent. Be aware that it might still be mined!':
+                console.log('@Implement: A proper way handling this error');
+                break;
+            case 'Govenence: Nothing to stake':
+                errorContent = 'You have nothing to stake';
+                break;
+            case 'execution reverted: Governance: Freezed period not passed':
+                errorContent = 'Freezed period not passed';
+                break;
+            case 'execution reverted: Governance: insufficient balance':
+                errorContent = 'Insufficient balance';
+                break;
+            default:
+                switch (err.code) {
+                    case 4001:
+                        errorContent = 'Transaction rejected by the user.';
+                        break;
+                    case 3:
+                        errorContent = 'Unlock value exceed locked fund';
+                        break;
+                    case 778: //custom error code: error is empty
+                    case 777: //custom error code: err.code is undefined AND went error again while JSON.parse
+                }
+        }
+        return errorContent;
+    }
     
     private async onAddVotingBalance() {
         try {
@@ -440,7 +486,9 @@ export default class ScomGovernanceUnlockStaking extends Module {
             }
             this.refreshUI();
         } catch (err) {
-            console.error(err);
+            console.error('unlockStake', err);
+            let errMsg = this.getAddVoteBalanceErrMsg(err);
+            this.showResultMessage('error', errMsg);
         }
         this.btnUnlock.rightIcon.spin = false;
         this.btnUnlock.rightIcon.visible = false;

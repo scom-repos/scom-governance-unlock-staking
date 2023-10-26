@@ -150,9 +150,51 @@ declare module "@scom/scom-governance-unlock-staking/api.ts" {
     export function getMinOaxTokenToCreateVote(state: State): Promise<number>;
     export function doUnlockStake(state: State): Promise<import("@ijstech/eth-contract").TransactionReceipt>;
 }
+/// <amd-module name="@scom/scom-governance-unlock-staking/flow/initialSetup.tsx" />
+declare module "@scom/scom-governance-unlock-staking/flow/initialSetup.tsx" {
+    import { Control, ControlElement, Module } from "@ijstech/components";
+    import { State } from "@scom/scom-governance-unlock-staking/store/index.ts";
+    interface ScomGovernanceStakingFlowInitialSetupElement extends ControlElement {
+        data?: any;
+    }
+    global {
+        namespace JSX {
+            interface IntrinsicElements {
+                ['i-scom-governance-unlock-staking-flow-initial-setup']: ScomGovernanceStakingFlowInitialSetupElement;
+            }
+        }
+    }
+    export default class ScomGovernanceUnlockStakingFlowInitialSetup extends Module {
+        private lblConnectedStatus;
+        private btnConnectWallet;
+        private mdWallet;
+        private _state;
+        private tokenRequirements;
+        private executionProperties;
+        private walletEvents;
+        get state(): State;
+        set state(value: State);
+        private get rpcWallet();
+        private get chainId();
+        private resetRpcWallet;
+        setData(value: any): Promise<void>;
+        private initWallet;
+        private initializeWidgetConfig;
+        connectWallet(): Promise<void>;
+        private updateConnectStatus;
+        private registerEvents;
+        onHide(): void;
+        init(): void;
+        private handleClickStart;
+        render(): any;
+        handleFlowStage(target: Control, stage: string, options: any): Promise<{
+            widget: ScomGovernanceUnlockStakingFlowInitialSetup;
+        }>;
+    }
+}
 /// <amd-module name="@scom/scom-governance-unlock-staking" />
 declare module "@scom/scom-governance-unlock-staking" {
-    import { ControlElement, Module, Container } from '@ijstech/components';
+    import { ControlElement, Module, Container, Control } from '@ijstech/components';
     import { INetworkConfig } from '@scom/scom-network-picker';
     import { IWalletPlugin } from '@scom/scom-wallet-modal';
     import { IGovernanceUnlockStaking } from "@scom/scom-governance-unlock-staking/interface.ts";
@@ -245,7 +287,11 @@ declare module "@scom/scom-governance-unlock-staking" {
         private initializeWidgetConfig;
         private showResultMessage;
         private connectWallet;
+        private getAddVoteBalanceErrMsg;
         private onAddVotingBalance;
         render(): any;
+        handleFlowStage(target: Control, stage: string, options: any): Promise<{
+            widget: any;
+        }>;
     }
 }

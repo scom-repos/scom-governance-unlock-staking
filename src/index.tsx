@@ -450,12 +450,12 @@ export default class ScomGovernanceUnlockStaking extends Module {
                 if (this.state.handleUpdateStepStatus) {
                     const data = votingBalance >= minThreshold ?
                         {
-                            caption: "Completed",
+                            status: "Completed",
                             color: Theme.colors.success.main
                         }
                         :
                         {
-                            caption: "Pending to stake",
+                            status: "Pending to stake",
                             color: Theme.colors.warning.main
                         };
                     this.state.handleUpdateStepStatus(data);

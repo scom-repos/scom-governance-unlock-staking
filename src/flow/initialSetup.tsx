@@ -111,7 +111,7 @@ export default class ScomGovernanceUnlockStakingFlowInitialSetup extends Module 
     private handleClickStart = async () => {
         if (this.state.handleUpdateStepStatus) {
             this.state.handleUpdateStepStatus({
-                caption: "Completed",
+                status: "Completed",
                 color: Theme.colors.success.main
             });
         }

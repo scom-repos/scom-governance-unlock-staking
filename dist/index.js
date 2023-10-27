@@ -377,7 +377,7 @@ define("@scom/scom-governance-unlock-staking/flow/initialSetup.tsx", ["require",
             this.handleClickStart = async () => {
                 if (this.state.handleUpdateStepStatus) {
                     this.state.handleUpdateStepStatus({
-                        caption: "Completed",
+                        status: "Completed",
                         color: Theme.colors.success.main
                     });
                 }
@@ -878,12 +878,12 @@ define("@scom/scom-governance-unlock-staking", ["require", "exports", "@ijstech/
                     if (this.state.handleUpdateStepStatus) {
                         const data = votingBalance >= minThreshold ?
                             {
-                                caption: "Completed",
+                                status: "Completed",
                                 color: Theme.colors.success.main
                             }
                             :
                                 {
-                                    caption: "Pending to stake",
+                                    status: "Pending to stake",
                                     color: Theme.colors.warning.main
                                 };
                         this.state.handleUpdateStepStatus(data);

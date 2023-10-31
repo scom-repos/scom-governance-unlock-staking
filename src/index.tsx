@@ -485,6 +485,7 @@ export default class ScomGovernanceUnlockStaking extends Module {
                         executionProperties: {
                             fromToken: this._data.fromToken,
                             toToken: this._data.toToken,
+                            customTokens: this._data.customTokens,
                             isFlow: true
                         }
                     })

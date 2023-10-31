@@ -914,6 +914,7 @@ define("@scom/scom-governance-unlock-staking", ["require", "exports", "@ijstech/
                             executionProperties: {
                                 fromToken: this._data.fromToken,
                                 toToken: this._data.toToken,
+                                customTokens: this._data.customTokens,
                                 isFlow: true
                             }
                         });

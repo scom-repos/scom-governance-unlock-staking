@@ -1,6 +1,7 @@
 /// <reference path="@scom/scom-dapp-container/@ijstech/eth-wallet/index.d.ts" />
 /// <reference path="@ijstech/eth-wallet/index.d.ts" />
 /// <reference path="@ijstech/eth-contract/index.d.ts" />
+/// <reference path="@scom/scom-token-list/index.d.ts" />
 /// <amd-module name="@scom/scom-governance-unlock-staking/assets.ts" />
 declare module "@scom/scom-governance-unlock-staking/assets.ts" {
     function fullPath(path: string): string;
@@ -56,6 +57,7 @@ declare module "@scom/scom-governance-unlock-staking/store/index.ts" {
 /// <amd-module name="@scom/scom-governance-unlock-staking/interface.ts" />
 declare module "@scom/scom-governance-unlock-staking/interface.ts" {
     import { INetworkConfig } from "@scom/scom-network-picker";
+    import { ITokenObject } from "@scom/scom-token-list";
     import { IWalletPlugin } from "@scom/scom-wallet-modal";
     export interface IGovernanceUnlockStaking extends IGovernanceUnlockStakingFlow {
         wallets: IWalletPlugin[];
@@ -67,6 +69,7 @@ declare module "@scom/scom-governance-unlock-staking/interface.ts" {
         isFlow?: boolean;
         fromToken?: string;
         toToken?: string;
+        customTokens?: Record<number, ITokenObject[]>;
     }
 }
 /// <amd-module name="@scom/scom-governance-unlock-staking/data.json.ts" />
@@ -269,6 +272,7 @@ declare module "@scom/scom-governance-unlock-staking" {
                 isFlow?: boolean;
                 fromToken?: string;
                 toToken?: string;
+                customTokens?: Record<number, import("@scom/scom-token-list/interface.ts").ITokenObject[]>;
             }>;
             setData: (properties: IGovernanceUnlockStaking, linkParams?: Record<string, any>) => Promise<void>;
             getTag: any;

@@ -890,15 +890,20 @@ define("@scom/scom-governance-unlock-staking", ["require", "exports", "@ijstech/
                     }
                     if (this.state.handleAddTransactions) {
                         const timestamp = await wallet.getBlockTimestamp(receipt.blockNumber.toString());
+                        const tokenAmount = components_4.FormatUtils.formatNumber(eth_wallet_4.Utils.fromDecimals(amount, token.decimals).toFixed(), {
+                            decimalFigures: 4
+                        });
                         const transactionsInfoArr = [
                             {
                                 desc: `Unlock ${token.symbol}`,
+                                chainId: this.chainId,
                                 fromToken: token,
                                 toToken: null,
                                 fromTokenAmount: amount,
                                 toTokenAmount: '-',
                                 hash: receipt.transactionHash,
-                                timestamp
+                                timestamp,
+                                value: `${tokenAmount} ${token.symbol}`
                             }
                         ];
                         this.state.handleAddTransactions({

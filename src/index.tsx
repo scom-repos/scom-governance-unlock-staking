@@ -9,7 +9,8 @@ import {
     Styles,
     moment,
     Container,
-    Control
+    Control,
+    FormatUtils
 } from '@ijstech/components';
 import ScomDappContainer from '@scom/scom-dapp-container';
 import { INetworkConfig } from '@scom/scom-network-picker';
@@ -462,15 +463,20 @@ export default class ScomGovernanceUnlockStaking extends Module {
                 }
                 if (this.state.handleAddTransactions) {
                     const timestamp = await wallet.getBlockTimestamp(receipt.blockNumber.toString());
+                    const tokenAmount = FormatUtils.formatNumber(Utils.fromDecimals(amount, token.decimals).toFixed(), {
+                        decimalFigures: 4
+                    });
                     const transactionsInfoArr = [
                         {
                             desc: `Unlock ${token.symbol}`,
+                            chainId: this.chainId,
                             fromToken: token,
                             toToken: null,
                             fromTokenAmount: amount,
                             toTokenAmount: '-',
                             hash: receipt.transactionHash,
-                            timestamp
+                            timestamp,
+                            value: `${tokenAmount} ${token.symbol}`
                         }
                     ];
                     this.state.handleAddTransactions({

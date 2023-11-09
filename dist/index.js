@@ -873,20 +873,11 @@ define("@scom/scom-governance-unlock-staking", ["require", "exports", "@ijstech/
                 const wallet = this.state.getRpcWallet();
                 const receipt = await (0, api_1.doUnlockStake)(this.state);
                 if (receipt) {
-                    const minThreshold = await (0, api_1.getMinOaxTokenToCreateVote)(this.state);
-                    const votingBalance = (await (0, api_1.stakeOf)(this.state, wallet.account.address)).toNumber();
                     if (this.state.handleUpdateStepStatus) {
-                        const data = votingBalance >= minThreshold ?
-                            {
-                                status: "Completed",
-                                color: Theme.colors.success.main
-                            }
-                            :
-                                {
-                                    status: "Pending to stake",
-                                    color: Theme.colors.warning.main
-                                };
-                        this.state.handleUpdateStepStatus(data);
+                        this.state.handleUpdateStepStatus({
+                            status: "Completed",
+                            color: Theme.colors.success.main
+                        });
                     }
                     if (this.state.handleAddTransactions) {
                         const timestamp = await wallet.getBlockTimestamp(receipt.blockNumber.toString());
@@ -913,7 +904,7 @@ define("@scom/scom-governance-unlock-staking", ["require", "exports", "@ijstech/
                     else {
                         this.showResultMessage('success', receipt.transactionHash);
                     }
-                    if (votingBalance >= minThreshold && this.state.handleJumpToStep) {
+                    if (this.state.handleJumpToStep) {
                         this.state.handleJumpToStep({
                             widgetName: 'scom-governance-proposal',
                             executionProperties: {

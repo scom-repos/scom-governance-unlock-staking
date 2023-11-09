@@ -445,21 +445,11 @@ export default class ScomGovernanceUnlockStaking extends Module {
             const wallet = this.state.getRpcWallet();
             const receipt = await doUnlockStake(this.state);
             if (receipt) {
-                const minThreshold = await getMinOaxTokenToCreateVote(this.state);
-                const votingBalance = (await stakeOf(this.state, wallet.account.address)).toNumber();
-
                 if (this.state.handleUpdateStepStatus) {
-                    const data = votingBalance >= minThreshold ?
-                        {
-                            status: "Completed",
-                            color: Theme.colors.success.main
-                        }
-                        :
-                        {
-                            status: "Pending to stake",
-                            color: Theme.colors.warning.main
-                        };
-                    this.state.handleUpdateStepStatus(data);
+                    this.state.handleUpdateStepStatus({
+                        status: "Completed",
+                        color: Theme.colors.success.main
+                    });
                 }
                 if (this.state.handleAddTransactions) {
                     const timestamp = await wallet.getBlockTimestamp(receipt.blockNumber.toString());
@@ -485,7 +475,7 @@ export default class ScomGovernanceUnlockStaking extends Module {
                 } else {
                     this.showResultMessage('success', receipt.transactionHash);
                 }
-                if (votingBalance >= minThreshold && this.state.handleJumpToStep) {
+                if (this.state.handleJumpToStep) {
                     this.state.handleJumpToStep({
                         widgetName: 'scom-governance-proposal',
                         executionProperties: {
